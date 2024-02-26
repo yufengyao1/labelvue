@@ -11,7 +11,7 @@
       <el-col :span="16">
         <div class="image_flag bg-70">
           <div class="image bg-70">
-            <canvas id="canvas" ref="canvas" width="500px" height="500px"></canvas>
+            <canvas id="canvas" ref="canvas" width="1928px" height="1090px"></canvas>
           </div>
           <div class="flag bg-40"></div>
         </div>
@@ -32,28 +32,31 @@ export default {
   },
   data() {
     return {
-      markdown: 'Hello, **Vue Markdown**!'
+      markdown: 'Hello, **Vue Markdown**!',
+      context: ""
     }
   },
   props: {
     msg: String
   },
   mounted() {
+   
     this.drawimage();
   },
   methods: {
     drawimage: function () {
-      console.log("okokok");
       var canvas = this.$refs.canvas;
-      var ctx = canvas.getContext('2d');
-      //加载图片
+      var context = canvas.getContext('2d');
       var img = new Image();
+      var w = canvas.width;
+      var h = canvas.height;
+      console.log(w);
+      console.log(h);
       img.onload = function () {
-        ctx.drawImage(img, 0, 0, 500, 500);
-        console.log("123");
+        context.drawImage(img, 0, 0, 1928,1090,0,0,w,h);
       }
-      // img.src = "@/src/images/001.png";
-      img.src = require('/src/images/001.png')
+      // img.src = require('/src/images/001.png')
+      img.src="http://localhost/img/label/001.png";
     }
   }
 }
@@ -106,7 +109,11 @@ export default {
   flex: 1;
 }
 
-
+canvas {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 
 .flag {
   height: 100px;
