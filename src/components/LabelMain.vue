@@ -10,7 +10,9 @@
       </el-col>
       <el-col :span="16">
         <div class="image_flag bg-70">
-          <div class="image bg-70"></div>
+          <div class="image bg-70">
+            <canvas id="canvas" ref="canvas" width="500px" height="500px"></canvas>
+          </div>
           <div class="flag bg-40"></div>
         </div>
       </el-col>
@@ -35,6 +37,24 @@ export default {
   },
   props: {
     msg: String
+  },
+  mounted() {
+    this.drawimage();
+  },
+  methods: {
+    drawimage: function () {
+      console.log("okokok");
+      var canvas = this.$refs.canvas;
+      var ctx = canvas.getContext('2d');
+      //加载图片
+      var img = new Image();
+      img.onload = function () {
+        ctx.drawImage(img, 0, 0, 500, 500);
+        console.log("123");
+      }
+      // img.src = "@/src/images/001.png";
+      img.src = require('/src/images/001.png')
+    }
   }
 }
 </script>
@@ -65,15 +85,15 @@ export default {
   height: 100%;
   border-right: 1px solid rgb(20, 20, 20);
   overflow: hidden;
-  color:rgb(240,240,240);
+  color: rgb(240, 240, 240);
   padding-left: 10px;
   padding-right: 10px;
   font-size: small;
 }
 
-.VueMarkdown{
-  margin:0;
-  height:100%;
+.VueMarkdown {
+  margin: 0;
+  height: 100%;
 }
 
 .image_flag {
@@ -85,6 +105,8 @@ export default {
 .image {
   flex: 1;
 }
+
+
 
 .flag {
   height: 100px;
