@@ -24,6 +24,8 @@
                 :class="{'tool-btn-pressed': btn_type == 5}"></el-button>
               <el-button class="tool-btn tool-btn-zoomout" @click="setMode(6)" 
                 :class="{'tool-btn-pressed': btn_type == 6}"></el-button>
+              <el-button class="tool-btn tool-btn-expand" @click="setMode(7)" 
+                :class="{'tool-btn-pressed': btn_type == 7}"></el-button>
               <el-button class="tool-btn"></el-button>
             </div>
 
@@ -81,7 +83,6 @@ export default {
     },
     setMode: function (type) {
       this.btn_type = type;
-      // console.log(type);
     }
   }
 }
@@ -89,6 +90,7 @@ export default {
 
 
 <style scoped>
+
 .el-container {
   height: 100vh;
   padding: 0;
@@ -156,7 +158,7 @@ export default {
   background-color: rgb(70, 70, 70);
   background-repeat: no-repeat;
   background-position: center;
-  margin-bottom: 8px !important;
+  margin-bottom: 9px !important;
 }
 
 .tool-btn:hover {
@@ -195,6 +197,9 @@ export default {
   background-image: url('../assets/out.png');
 }
 
+.tool-btn-expand {
+  background-image: url('../assets/expand.png');
+}
 
 canvas {
   height: 100%;
