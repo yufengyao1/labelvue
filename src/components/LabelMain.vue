@@ -11,12 +11,28 @@
       <el-col :span="16">
         <div class="image_flag bg-70">
           <div class="image bg-70">
+            <div class="toolbar">
+              <el-button class="tool-btn tool-btn-hand" @click="setMode(1)"
+                :class="{ 'tool-btn-pressed': btn_type == 1 }"></el-button>
+              <el-button class="tool-btn tool-btn-point" @click="setMode(2)"
+                :class="{'tool-btn-pressed': btn_type == 2}"></el-button>
+              <el-button class="tool-btn tool-btn-rect" @click="setMode(3)" 
+                :class="{'tool-btn-pressed': btn_type == 3}"></el-button>
+              <el-button class="tool-btn tool-btn-polygon" @click="setMode(4)" 
+                :class="{'tool-btn-pressed': btn_type == 4}"></el-button>
+              <el-button class="tool-btn tool-btn-zoomin" @click="setMode(5)" 
+                :class="{'tool-btn-pressed': btn_type == 5}"></el-button>
+              <el-button class="tool-btn tool-btn-zoomout" @click="setMode(6)" 
+                :class="{'tool-btn-pressed': btn_type == 6}"></el-button>
+              <el-button class="tool-btn"></el-button>
+            </div>
+
             <canvas id="canvas" ref="canvas" width="1928px" height="1090px"></canvas>
           </div>
           <div class="flag bg-40"></div>
         </div>
       </el-col>
-      <el-col :span="4">
+      <el-col :span=" 4 ">
         <div class="labellist bg-40"></div>
       </el-col>
     </el-main>
@@ -33,14 +49,15 @@ export default {
   data() {
     return {
       markdown: 'Hello, **Vue Markdown**!',
-      context: ""
+      context: "",
+      btn_type: 1
     }
   },
   props: {
     msg: String
   },
   mounted() {
-   
+
     this.drawimage();
   },
   methods: {
@@ -48,15 +65,23 @@ export default {
       var canvas = this.$refs.canvas;
       var context = canvas.getContext('2d');
       var img = new Image();
-      var w = canvas.width;
-      var h = canvas.height;
-      console.log(w);
-      console.log(h);
+
       img.onload = function () {
-        context.drawImage(img, 0, 0, 1928,1090,0,0,w,h);
+        canvas.height = this.height;
+        canvas.width = this.width;
+
+        var w = canvas.width;
+        var h = canvas.height;
+        // console.log(w);
+        // console.log(h);
+
+        context.drawImage(img, 0, 0, this.width, this.height, 0, 0, w, h);
       }
-      // img.src = require('/src/images/001.png')
-      img.src="http://localhost/img/label/001.png";
+      img.src = require('/src/images/001.png')
+    },
+    setMode: function (type) {
+      this.btn_type = type;
+      // console.log(type);
     }
   }
 }
@@ -107,12 +132,75 @@ export default {
 
 .image {
   flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(70, 70, 70);
+  width: 41px;
+  padding-top: 10px;
+}
+
+.tool-btn {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 30px;
+  height: 24px;
+  border-radius: 2px !important;
+  border: none;
+  background-color: rgb(70, 70, 70);
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 8px !important;
+}
+
+.tool-btn:hover {
+  background-color: rgb(62, 62, 62) !important;
+  border: 1px solid rgb(43, 43, 43) !important;
+}
+
+.tool-btn-pressed {
+  background-color: rgb(62, 62, 62) !important;
+  border: 1px solid rgb(43, 43, 43) !important;
+}
+
+.tool-btn-hand {
+  background-image: url('../assets/hand.png');
+  /* background-color: rgb(62, 62, 62) !important;
+  border: 1px solid rgb(43, 43, 43) !important; */
+}
+
+.tool-btn-point {
+  background-image: url('../assets/point.png');
+}
+
+.tool-btn-rect {
+  background-image: url('../assets/rect.png');
+}
+
+.tool-btn-polygon {
+  background-image: url('../assets/polygon.png');
+}
+
+.tool-btn-zoomin {
+  background-image: url('../assets/in.png');
+}
+
+.tool-btn-zoomout {
+  background-image: url('../assets/out.png');
+}
+
 
 canvas {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  flex: 1;
 }
 
 .flag {
