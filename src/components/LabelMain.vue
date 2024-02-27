@@ -15,26 +15,32 @@
               <el-button class="tool-btn tool-btn-hand" @click="setMode(1)"
                 :class="{ 'tool-btn-pressed': btn_type == 1 }"></el-button>
               <el-button class="tool-btn tool-btn-point" @click="setMode(2)"
-                :class="{'tool-btn-pressed': btn_type == 2}"></el-button>
-              <el-button class="tool-btn tool-btn-rect" @click="setMode(3)" 
-                :class="{'tool-btn-pressed': btn_type == 3}"></el-button>
-              <el-button class="tool-btn tool-btn-polygon" @click="setMode(4)" 
-                :class="{'tool-btn-pressed': btn_type == 4}"></el-button>
-              <el-button class="tool-btn tool-btn-zoomin" @click="setMode(5)" 
-                :class="{'tool-btn-pressed': btn_type == 5}"></el-button>
-              <el-button class="tool-btn tool-btn-zoomout" @click="setMode(6)" 
-                :class="{'tool-btn-pressed': btn_type == 6}"></el-button>
-              <el-button class="tool-btn tool-btn-expand" @click="setMode(7)" 
-                :class="{'tool-btn-pressed': btn_type == 7}"></el-button>
+                :class="{ 'tool-btn-pressed': btn_type == 2 }"></el-button>
+              <el-button class="tool-btn tool-btn-rect" @click="setMode(3)"
+                :class="{ 'tool-btn-pressed': btn_type == 3 }"></el-button>
+              <el-button class="tool-btn tool-btn-polygon" @click="setMode(4)"
+                :class="{ 'tool-btn-pressed': btn_type == 4 }"></el-button>
+              <el-button class="tool-btn tool-btn-zoomin" @click="setMode(5)"
+                :class="{ 'tool-btn-pressed': btn_type == 5 }"></el-button>
+              <el-button class="tool-btn tool-btn-zoomout" @click="setMode(6)"
+                :class="{ 'tool-btn-pressed': btn_type == 6 }"></el-button>
+              <el-button class="tool-btn tool-btn-expand" @click="setMode(7)"
+                :class="{ 'tool-btn-pressed': btn_type == 7 }"></el-button>
               <el-button class="tool-btn"></el-button>
             </div>
 
             <canvas id="canvas" ref="canvas" width="1928px" height="1090px"></canvas>
           </div>
-          <div class="flag bg-40"></div>
+          <div class="flag bg-40">
+            <el-carousel :interval="4000" type="card" height="70px">
+              <el-carousel-item v-for="item in imgList" :key="item.id">
+                <h3> <img :src="item.idView" class="banner"></h3>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
         </div>
       </el-col>
-      <el-col :span=" 4 ">
+      <el-col :span="4">
         <div class="labellist bg-40"></div>
       </el-col>
     </el-main>
@@ -52,7 +58,19 @@ export default {
     return {
       markdown: 'Hello, **Vue Markdown**!',
       context: "",
-      btn_type: 1
+      btn_type: 1,
+      imgList: [
+        { id: 0, idView: require('/src/images/001.png') },
+        { id: 1, idView: require('/src/images/002.png') },
+        { id: 2, idView: require('/src/images/003.png') },
+        { id: 3, idView: require('/src/images/004.png') },
+        { id: 4, idView: require('/src/images/005.png') },
+        { id: 5, idView: require('/src/images/006.png') },
+        { id: 6, idView: require('/src/images/007.png') },
+        { id: 7, idView: require('/src/images/008.png') },
+        { id: 8, idView: require('/src/images/009.png') },
+        { id: 9, idView: require('/src/images/010.png') }
+      ]
     }
   },
   props: {
@@ -90,7 +108,6 @@ export default {
 
 
 <style scoped>
-
 .el-container {
   height: 100vh;
   padding: 0;
@@ -138,6 +155,7 @@ export default {
   display: flex;
   flex-direction: row;
 }
+
 
 .toolbar {
   display: flex;
@@ -199,6 +217,14 @@ export default {
 
 .tool-btn-expand {
   background-image: url('../assets/expand.png');
+}
+
+.banner {
+  display: block;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 canvas {
