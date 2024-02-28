@@ -41,7 +41,16 @@
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="labellist bg-40"></div>
+        <div class="class_label bg-40">
+          <h>类别</h>
+          <ul>
+            <li v-for="item in classList" v-bind:key="item">{{ item[0]+"   "+item[1] }}</li>
+          </ul>
+          <h>标注</h>
+          <ul>
+            <li v-for="item in labelList" v-bind:key="item">{{ item}}</li>
+          </ul>
+        </div>
       </el-col>
     </el-main>
   </el-container>
@@ -70,6 +79,19 @@ export default {
         { id: 7, idView: require('/src/images/008.png') },
         { id: 8, idView: require('/src/images/009.png') },
         { id: 9, idView: require('/src/images/010.png') }
+      ],
+      classList: [
+        ["people", [255, 0, 0]],
+        ["dog", [255, 0, 0]],
+        ["bicycle", [255, 0, 0]],
+        ["cat", [255, 0, 0]],
+        ["bottle", [255, 0, 0]]
+      ],
+      labelList: [
+        [0.1, 0.1, 0.9, 0.9, 0.9, 0.8, 0.1, 0.8],
+        [0.15, 0.15, 0.8, 0.8, 0.8, 0.7, 0.15, 0.7],
+        [0.15, 0.15, 0.8, 0.8, 0.8, 0.7, 0.15, 0.7],
+        [0.15, 0.15, 0.8, 0.8, 0.8, 0.7, 0.15, 0.7]
       ]
     }
   },
@@ -92,9 +114,6 @@ export default {
 
         var w = canvas.width;
         var h = canvas.height;
-        // console.log(w);
-        // console.log(h);
-
         context.drawImage(img, 0, 0, this.width, this.height, 0, 0, w, h);
       }
       img.src = require('/src/images/001.png')
@@ -121,6 +140,7 @@ export default {
   color: rgb(240, 240, 240);
   background-color: rgb(20, 20, 20);
   font-size: small;
+  border-bottom: 1px solid rgb(40, 40, 40);
 }
 
 .el-main {
@@ -130,7 +150,7 @@ export default {
 
 .markdown {
   height: 100%;
-  border-right: 1px solid rgb(20, 20, 20);
+  border-right: 1px solid rgb(35, 35, 35);
   overflow: hidden;
   color: rgb(240, 240, 240);
   padding-left: 10px;
@@ -219,13 +239,7 @@ export default {
   background-image: url('../assets/expand.png');
 }
 
-.banner {
-  display: block;
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+
 
 canvas {
   height: 100%;
@@ -239,9 +253,39 @@ canvas {
   border-top: 1px solid rgb(20, 20, 20);
 }
 
-.labellist {
+.banner {
+  display: block;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.class_label {
   height: 100%;
-  border-left: 1px solid rgb(20, 20, 20);
+  border-left: 1px solid rgb(35, 35, 35);
+  display: flex;
+  flex-direction: column;
+  color: rgb(240, 240, 240);
+  font-size: small;
+}
+
+.class_label h {
+  height: 10px;
+  text-align: center;
+}
+
+.class_label ul {
+  flex: 1;
+  overflow-y: scroll;
+  margin-right: -17px;
+  padding-inline-start: 0px !important;
+}
+
+.class_label li {
+  border-top: 1px solid rgb(35, 35, 35);
+  border-bottom: 1px solid rgb(35, 35, 35);
+  list-style-type: none;
 }
 
 .grid-content {
