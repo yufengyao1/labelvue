@@ -12,19 +12,19 @@
         <div class="image_flag bg-70">
           <div class="image bg-70">
             <div class="toolbar">
-              <el-button class="tool-btn tool-btn-hand" @click="setMode(1)"
+              <el-button class="tool-btn tool-btn-hand" @click="setcurrentMode(1)"
                 :class="{ 'tool-btn-pressed': btn_type == 1 }"></el-button>
-              <el-button class="tool-btn tool-btn-point" @click="setMode(2)"
+              <el-button class="tool-btn tool-btn-point" @click="setcurrentMode(2)"
                 :class="{ 'tool-btn-pressed': btn_type == 2 }"></el-button>
-              <el-button class="tool-btn tool-btn-rect" @click="setMode(3)"
+              <el-button class="tool-btn tool-btn-rect" @click="setcurrentMode(3)"
                 :class="{ 'tool-btn-pressed': btn_type == 3 }"></el-button>
-              <el-button class="tool-btn tool-btn-polygon" @click="setMode(4)"
+              <el-button class="tool-btn tool-btn-polygon" @click="setcurrentMode(4)"
                 :class="{ 'tool-btn-pressed': btn_type == 4 }"></el-button>
-              <el-button class="tool-btn tool-btn-zoomin" @click="setMode(5)"
+              <el-button class="tool-btn tool-btn-zoomin" @click="setcurrentMode(5)"
                 :class="{ 'tool-btn-pressed': btn_type == 5 }"></el-button>
-              <el-button class="tool-btn tool-btn-zoomout" @click="setMode(6)"
+              <el-button class="tool-btn tool-btn-zoomout" @click="setcurrentMode(6)"
                 :class="{ 'tool-btn-pressed': btn_type == 6 }"></el-button>
-              <el-button class="tool-btn tool-btn-expand" @click="setMode(7)"
+              <el-button class="tool-btn tool-btn-expand" @click="setcurrentMode(7)"
                 :class="{ 'tool-btn-pressed': btn_type == 7 }"></el-button>
               <el-button class="tool-btn"></el-button>
             </div>
@@ -44,11 +44,12 @@
         <div class="class_label bg-40">
           <h>类别</h>
           <ul>
-            <li v-for="item in classList" v-bind:key="item">{{ item[0]+"   "+item[1] }}</li>
+            <li v-for="item in classList" v-bind:key="item"> <span class="colorbar"
+              :style="randomRgb(item[1])"></span>{{ item[0] }}</li>
           </ul>
           <h>标注</h>
           <ul>
-            <li v-for="item in labelList" v-bind:key="item">{{ item}}</li>
+            <li v-for="item in labelList" v-bind:key="item">{{ item }}</li>
           </ul>
         </div>
       </el-col>
@@ -81,18 +82,26 @@ export default {
         { id: 9, idView: require('/src/images/010.png') }
       ],
       classList: [
-        ["people", [255, 0, 0]],
-        ["dog", [255, 0, 0]],
-        ["bicycle", [255, 0, 0]],
-        ["cat", [255, 0, 0]],
-        ["bottle", [255, 0, 0]]
+        ["people", [50, 89, 0]],
+        ["dog", [70, 0, 6]],
+        ["bicycle", [70, 200, 40]],
+        ["cat", [255, 60, 0]],
+        ["bottle", [255, 10, 60]]
       ],
       labelList: [
         [0.1, 0.1, 0.9, 0.9, 0.9, 0.8, 0.1, 0.8],
         [0.15, 0.15, 0.8, 0.8, 0.8, 0.7, 0.15, 0.7],
         [0.15, 0.15, 0.8, 0.8, 0.8, 0.7, 0.15, 0.7],
         [0.15, 0.15, 0.8, 0.8, 0.8, 0.7, 0.15, 0.7]
-      ]
+      ],
+      randomRgb(item) {
+        let R = item[0];
+        let G = item[1];
+        let B = item[2];
+        return {
+          background: 'rgb(' + R + ',' + G + ',' + B + ', .5)'
+        };
+      }
     }
   },
   props: {
@@ -118,8 +127,14 @@ export default {
       }
       img.src = require('/src/images/001.png')
     },
-    setMode: function (type) {
+    setcurrentMode: function (type) {
       this.btn_type = type;
+    },
+    getRandomColor: function () {
+      return '#' + (function (color) {
+        return (color += '0123456789abcdef'[Math.floor(Math.random() * 16)])
+          && (color.length == 6) ? color : arguments.callee(color);
+      })('');
     }
   }
 }
@@ -283,9 +298,25 @@ canvas {
 }
 
 .class_label li {
-  border-top: 1px solid rgb(35, 35, 35);
-  border-bottom: 1px solid rgb(35, 35, 35);
+  display: flex;
+  /* border-bottom: 1px solid rgb(35, 35, 35); */
   list-style-type: none;
+  height: 22px;
+  vertical-align: center;
+  line-height: 22px !important;
+}
+.class_label li :hover{
+  background-color: rgb(70,70,.70);
+}
+
+.colorbar {
+  display: block;
+  width: 15px;
+  height: 22px;
+  border: none !important;
+  /* background-color: red; */
+  padding: none !important;
+  margin-right: 5px;
 }
 
 .grid-content {
