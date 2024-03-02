@@ -117,9 +117,7 @@ export default {
     let canvasHeight = canvas.height
     canvas.width = canvasWidth * ratio
     canvas.height = canvasHeight * ratio
-
     this.init_image();
-    // this.drawimage();
   },
   methods: {
     init_image: function () {
@@ -171,6 +169,11 @@ export default {
     },
     handleChange(val) {
       this.currentIndex = val; // 更新当前图片索引值
+      // this.init_image();
+    }
+  },
+  watch:{
+    currentIndex:function(){
       this.init_image();
     }
   }
