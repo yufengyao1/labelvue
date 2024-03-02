@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <LabelMain msg="Welcome to Your Vue.js App"/>
+    <LabelMain msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
@@ -16,10 +16,17 @@ export default {
 </script>
 
 <style>
-body{
-  margin:0px;
-  padding:0px;
+html {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
