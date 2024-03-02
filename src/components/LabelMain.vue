@@ -28,24 +28,21 @@
                 :class="{ 'tool-btn-pressed': btn_type == 7 }"></el-button>
               <el-button class="tool-btn"></el-button>
             </div>
-
-            <canvas id="canvas" ref="canvas" width="1928px" height="1090px"></canvas>
+            <canvas id="canvas" ref="canvas"></canvas>
           </div>
-          <div class="flag bg-40">
-            <el-carousel :interval="4000" type="card" height="70px">
-              <el-carousel-item v-for="item in imgList" :key="item.id">
-                <h3> <img :src="item.idView" class="banner"></h3>
-              </el-carousel-item>
-            </el-carousel>
-          </div>
+          <el-carousel :interval="3000" :autoplay="false" type="card" @change="handleChange">
+            <el-carousel-item v-for="item in imgList" :key="item.id">
+              <h3 justify="center"><img class="carousel-image" :src="item.idView"></h3>
+            </el-carousel-item>
+          </el-carousel>
         </div>
       </el-col>
       <el-col :span="4">
         <div class="class_label bg-40">
           <h>类别</h>
           <ul>
-            <li v-for="item in classList" v-bind:key="item"> <span class="colorbar"
-              :style="randomRgb(item[1])"></span>{{ item[0] }}</li>
+            <li v-for="item in classList" v-bind:key="item"> <span class="colorbar" :style="randomRgb(item[1])"></span>{{
+              item[0] }}</li>
           </ul>
           <h>标注</h>
           <ul>
@@ -69,6 +66,7 @@ export default {
       markdown: 'Hello, **Vue Markdown**!',
       context: "",
       btn_type: 1,
+      currentIndex: 0,
       imgList: [
         { id: 0, idView: require('/src/images/001.png') },
         { id: 1, idView: require('/src/images/002.png') },
@@ -86,7 +84,7 @@ export default {
         ["dog", [70, 0, 6]],
         ["bicycle", [70, 200, 40]],
         ["cat", [255, 60, 0]],
-        ["bottle", [255, 10, 60]]
+        ["bottle", [159, 110, 160]]
       ],
       labelList: [
         [0.1, 0.1, 0.9, 0.9, 0.9, 0.8, 0.1, 0.8],
@@ -108,21 +106,56 @@ export default {
     msg: String
   },
   mounted() {
+    var canvas = this.$refs.canvas;
+    var ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    let devicePixelRatio = window.devicePixelRatio || 1
+    let backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1
+    let ratio = devicePixelRatio / backingStoreRatio
+    let canvasWidth = canvas.width
+    let canvasHeight = canvas.height
+    canvas.width = canvasWidth * ratio
+    canvas.height = canvasHeight * ratio
 
-    this.drawimage();
+    this.init_image();
+    // this.drawimage();
   },
   methods: {
+    init_image: function () {
+      var canvas = this.$refs.canvas;
+      var context = canvas.getContext('2d');
+      var img = new Image();
+      img.onload = function () {
+        var w = canvas.width;
+        var h = canvas.height;
+        var img_w = this.width;
+        var img_h = this.height;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        if (w / h > img_w / img_h) {
+          // 等高
+          const view_width = 1.0 * h * img_w / img_h;
+          const offset_x = (w - view_width) / 2;
+          context.drawImage(img, 0, 0, this.width, this.height, offset_x, 0, view_width, h);
+        }
+        else {
+          //等宽
+          const view_height = 1.0 * w * img_h / img_w;
+          const offset_y = (h - view_height) / 2;
+          context.drawImage(img, 0, 0, this.width, this.height, 0, offset_y, w, view_height);
+        }
+      }
+      img.src = this.imgList[this.currentIndex]["idView"];
+    },
     drawimage: function () {
       var canvas = this.$refs.canvas;
       var context = canvas.getContext('2d');
       var img = new Image();
-
       img.onload = function () {
-        canvas.height = this.height;
-        canvas.width = this.width;
-
         var w = canvas.width;
         var h = canvas.height;
+        console.log(w)
+        console.log(h)
         context.drawImage(img, 0, 0, this.width, this.height, 0, 0, w, h);
       }
       img.src = require('/src/images/001.png')
@@ -135,6 +168,10 @@ export default {
         return (color += '0123456789abcdef'[Math.floor(Math.random() * 16)])
           && (color.length == 6) ? color : arguments.callee(color);
       })('');
+    },
+    handleChange(val) {
+      this.currentIndex = val; // 更新当前图片索引值
+      this.init_image();
     }
   }
 }
@@ -143,8 +180,9 @@ export default {
 
 <style scoped>
 .el-container {
-  height: 100vh;
+  height: 100%;
   padding: 0;
+  margin: 0;
 }
 
 .el-header {
@@ -153,7 +191,7 @@ export default {
   text-align: center;
   line-height: 35px;
   color: rgb(240, 240, 240);
-  background-color: rgb(20, 20, 20);
+  background-color: rgb(75, 75, 75);
   font-size: small;
   border-bottom: 1px solid rgb(40, 40, 40);
 }
@@ -161,11 +199,12 @@ export default {
 .el-main {
   align-items: stretch;
   padding: 0;
+  overflow: hidden;
 }
 
 .markdown {
   height: 100%;
-  border-right: 1px solid rgb(35, 35, 35);
+  border-right: 1px solid rgb(40, 40, 40);
   overflow: hidden;
   color: rgb(240, 240, 240);
   padding-left: 10px;
@@ -189,6 +228,7 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: row;
+  /* border: 1px solid white; */
 }
 
 
@@ -196,7 +236,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(70, 70, 70);
+  background-color: rgb(75, 75, 75);
   width: 41px;
   padding-top: 10px;
 }
@@ -208,7 +248,7 @@ export default {
   height: 24px;
   border-radius: 2px !important;
   border: none;
-  background-color: rgb(70, 70, 70);
+  background-color: rgb(75, 75, 75);
   background-repeat: no-repeat;
   background-position: center;
   margin-bottom: 9px !important;
@@ -263,22 +303,30 @@ canvas {
   flex: 1;
 }
 
-.flag {
-  height: 100px;
-  border-top: 1px solid rgb(20, 20, 20);
+
+.el-carousel {
+  height: 100px !important;
+  background-color: rgb(40, 40, 40);
 }
 
-.banner {
-  display: block;
+
+.carousel-image {
   width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  height: 100px !important;
+  border: 1px solid rgb(220, 220, 220);
+  box-sizing: border-box;
+}
+
+.el-carousel__item h3 {
+  opacity: 1;
+  text-align: center;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
 }
 
 .class_label {
   height: 100%;
-  border-left: 1px solid rgb(35, 35, 35);
+  border-left: 1px solid rgb(40, 40, 40);
   display: flex;
   flex-direction: column;
   color: rgb(240, 240, 240);
@@ -287,7 +335,12 @@ canvas {
 
 .class_label h {
   height: 10px;
+  line-height: 10px;
   text-align: center;
+  /* border-top: 1px solid rgb(40, 40, 40); */
+  border-bottom: 1px solid rgb(40, 40, 40);
+  padding: 5px;
+  background-color: rgb(57, 57, 57);
 }
 
 .class_label ul {
@@ -299,14 +352,15 @@ canvas {
 
 .class_label li {
   display: flex;
-  /* border-bottom: 1px solid rgb(35, 35, 35); */
+  /* border-bottom: 1px solid rgb(40, 40, 40); */
   list-style-type: none;
   height: 22px;
   vertical-align: center;
   line-height: 22px !important;
 }
-.class_label li :hover{
-  background-color: rgb(70,70,.70);
+
+.class_label li:hover {
+  background-color: rgb(70, 70, 70);
 }
 
 .colorbar {
@@ -318,6 +372,9 @@ canvas {
   padding: none !important;
   margin-right: 5px;
 }
+
+
+
 
 .grid-content {
   height: 100%;
