@@ -1,6 +1,6 @@
 # LabelVue
 <p align="center">
-    <img src="src/assets/example1.png" width="800">
+    <img src="src/assets/example01.png" width="800">
 </p>
 
 <br><br>
