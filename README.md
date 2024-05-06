@@ -9,7 +9,7 @@ This is an example of label tool created by vue
 
 <br>
 <p align="center">
-    <img height="300" src="src/assets/example1.png"/>
+    <img height="300" src="src/assets/example2.png"/>
 </p>
 
 
