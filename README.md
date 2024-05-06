@@ -1,6 +1,6 @@
 # LabelVue
 <p align="center">
-    <img src="figures/collage_1.jpg" width="800">
+    <img src="src/assets/example1.png" width="800">
 </p>
 
 <br><br>
@@ -9,7 +9,7 @@ This is an example of label tool created by vue
 
 <br>
 <p align="center">
-    <img height="300" src="figures/comparison.png"/>
+    <img height="300" src="src/assets/example2.png"/>
 </p>
 
 
